@@ -5,5 +5,5 @@ def exp(base, a):
 		return base ** a
 
 base = float(input("enter base value: "))
-a = flaot(input("enter exponent value: "))
+a = float(input("enter exponent value: "))
 print (exp(base,a))
