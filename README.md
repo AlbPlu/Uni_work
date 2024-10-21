@@ -1,6 +1,8 @@
-# My python math operation project
+# My git project
 
-This project contains python scripts for math operations
+This repository contains a folder for my calculator project
+
+This project contains python scripts for math operations:
 
 *) Addition
 *) Subtraction
