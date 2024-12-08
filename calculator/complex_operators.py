@@ -25,6 +25,7 @@ def exponent(base, power):
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error: An unexpected error occurred"
 
 def logarithm(value, base=math.e):
     """
@@ -45,6 +46,7 @@ def logarithm(value, base=math.e):
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error: An unexpected error occurred"
 
 def nth_root(value, n):
     """
@@ -61,9 +63,15 @@ def nth_root(value, n):
         if n % 2 == 0 and value < 0:
             raise ValueError("Even roots of negative numbers are undefined in real numbers.")
         
-        result = math.pow(value, 1 / n)
+        # Handle odd roots of negative numbers manually
+        if n % 2 != 0 and value < 0:
+            result = -((-value) ** (1 / n))  # Take the n-th root of the positive value, then negate
+        else:
+            result = value ** (1 / n)  # Use the exponentiation operator
+        
         if precision_value is not None:
             return round(result, precision_value)
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error: An unexpected error occurred"
