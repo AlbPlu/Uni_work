@@ -56,36 +56,3 @@ def logarithm(value, base=math.e):
         handle_error(e, display_to_user=True)
         log_operation("Logarithm", f"Value: {value}, Base: {base}", "Error: An unexpected error occurred")
         return "Error"
-
-def nth_root(value, n):
-    """
-    Calculates the n-th root of a value. Enforces real number rules and logs the operation.
-    """
-    try:
-        # Rule: n cannot be zero
-        if n == 0:
-            raise ValueError("The index of the root (n) cannot be zero.")
-        # Rule: n must be an integer
-        if not isinstance(n, int):
-            raise ValueError("The index of the root (n) must be an integer.")
-        # Rule: Even roots of negative numbers are undefined
-        if n % 2 == 0 and value < 0:
-            raise ValueError("Even roots of negative numbers are undefined in real numbers.")
-        
-        # Handle odd roots of negative numbers manually
-        if n % 2 != 0 and value < 0:
-            result = -((-value) ** (1 / n))  # Take the n-th root of the positive value, then negate
-        else:
-            result = value ** (1 / n)  # Use the exponentiation operator
-        
-        if precision_value is not None:
-            result = round(result, precision_value)
-        
-        # Log the operation
-        log_operation("Nth Root", f"Value: {value}, Index: {n}", result)
-        return result
-    
-    except Exception as e:
-        handle_error(e, display_to_user=True)
-        log_operation("Nth Root", f"Value: {value}, Index: {n}", "Error: An unexpected error occurred")
-        return "Error"
