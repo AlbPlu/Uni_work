@@ -21,6 +21,7 @@ def apply_precision(value):
 def evaluate_expression(expression):
     """
     Evaluates a mathematical expression, including basic and trigonometric functions.
+    Logs the operation if applicable.
     :param expression: The input string (e.g., "sin(90)+5")
     :return: The evaluated result.
     """
@@ -52,7 +53,8 @@ def evaluate_expression(expression):
             func_name = match.group(1)  # Trigonometric function name
             argument = float(match.group(2))  # Extract the angle or value
             if func_name in trig_operations:
-                return str(apply_precision(trig_operations[func_name](argument)))  # Evaluate with precision
+                result = trig_operations[func_name](argument)
+                return str(apply_precision(result))  # Evaluate with precision
             raise ValueError(f"Unsupported function: {func_name}")
 
         # Replace trigonometric functions with their evaluated results
@@ -67,7 +69,8 @@ def evaluate_expression(expression):
         if match:
             operand1, operator, operand2 = float(match.group(1)), match.group(3), float(match.group(4))
             if operator in basic_operations:
-                return apply_precision(basic_operations[operator](operand1, operand2))
+                # Use the operator function, which logs the operation
+                return basic_operations[operator](operand1, operand2)
 
         # If no valid operation is detected
         raise ValueError("Invalid input or unsupported operation.")
