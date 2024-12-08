@@ -1,6 +1,4 @@
 from config import load_config
-from error_handler import handle_error
-from db_log import log_operation  # Import the logging function for database
 
 # Load configuration
 config = load_config()
@@ -9,69 +7,39 @@ precision_value = config.get("precision_value", None) if enable_precision else N
 
 def add(a, b):
     """
-    Adds two numbers, applies rounding if precision is enabled, and logs the operation.
+    Adds two numbers and applies rounding if precision is enabled.
     """
-    try:
-        result = a + b
-        if precision_value is not None:
-            result = round(result, precision_value)
-        # Log the operation to the database
-        log_operation("Addition", f"{a}, {b}", result)
-        return result
-    except Exception as e:
-        handle_error(e, display_to_user=True)
-        return "Error"
+    result = a + b
+    if precision_value is not None:
+        result = round(result, precision_value)
+    return result
 
 def subtract(a, b):
     """
-    Subtracts the second number from the first, applies rounding if precision is enabled, and logs the operation.
+    Subtracts the second number from the first and applies rounding if precision is enabled.
     """
-    try:
-        result = a - b
-        if precision_value is not None:
-            result = round(result, precision_value)
-        # Log the operation to the database
-        log_operation("Subtraction", f"{a}, {b}", result)
-        return result
-    except Exception as e:
-        handle_error(e, display_to_user=True)
-        return "Error"
+    result = a - b
+    if precision_value is not None:
+        result = round(result, precision_value)
+    return result
 
 def multiply(a, b):
     """
-    Multiplies two numbers, applies rounding if precision is enabled, and logs the operation.
+    Multiplies two numbers and applies rounding if precision is enabled.
     """
-    try:
-        result = a * b
-        if precision_value is not None:
-            result = round(result, precision_value)
-        # Log the operation to the database
-        log_operation("Multiplication", f"{a}, {b}", result)
-        return result
-    except Exception as e:
-        handle_error(e, display_to_user=True)
-        return "Error"
+    result = a * b
+    if precision_value is not None:
+        result = round(result, precision_value)
+    return result
 
 def divide(a, b):
     """
-    Divides the first number by the second, applies rounding if precision is enabled, handles division by zero gracefully, and logs the operation.
+    Divides the first number by the second and applies rounding if precision is enabled.
+    Handles division by zero gracefully by raising a ZeroDivisionError.
     """
-    try:
-        if b == 0:
-            raise ZeroDivisionError("Division by zero is not allowed.")
-        result = a / b
-        if precision_value is not None:
-            result = round(result, precision_value)
-        # Log the operation to the database
-        log_operation("Division", f"{a}, {b}", result)
-        return result
-    except ZeroDivisionError as e:
-        handle_error(e, display_to_user=True)
-        # Log the error to the database with "Error" as the result
-        log_operation("Division", f"{a}, {b}", "Error: Division by zero")
-        return "Error"
-    except Exception as e:
-        handle_error(e, display_to_user=True)
-        # Log the error to the database with "Error" as the result
-        log_operation("Division", f"{a}, {b}", "Error: An unexpected error occurred")
-        return "Error"
+    if b == 0:
+        raise ZeroDivisionError("Division by zero is not allowed.")
+    result = a / b
+    if precision_value is not None:
+        result = round(result, precision_value)
+    return result
