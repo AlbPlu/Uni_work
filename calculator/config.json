@@ -1,4 +1,5 @@
 {
     "enable_precision": true,
-    "precision_value": 2
+    "precision_value": 2,
+    "angle_unit": "degrees"
 }

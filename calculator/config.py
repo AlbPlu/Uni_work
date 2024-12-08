@@ -22,7 +22,8 @@ def load_config(config_file="config.json"):
     logging.warning("Using default configuration as fallback.")
     return {
         "enable_precision": False,
-        "precision_value": None
+        "precision_value": None,
+        "angle_unit": "radians"  # Default to radians if config file fails
     }
 
 def clean_config(config):
@@ -35,11 +36,13 @@ def clean_config(config):
     # Ensure defaults
     config.setdefault("enable_precision", False)
     config.setdefault("precision_value", 2 if config["enable_precision"] else None)
+    config.setdefault("angle_unit", "radians")  # Default to radians
 
     # Validate keys and types
     required_keys = {
         "enable_precision": bool,
-        "precision_value": (int, type(None))
+        "precision_value": (int, type(None)),
+        "angle_unit": str  # Must be a string
     }
 
     for key, expected_type in required_keys.items():
@@ -49,5 +52,9 @@ def clean_config(config):
             raise ValueError(
                 f"Invalid type for key '{key}': Expected {expected_type}, got {type(config[key])}"
             )
-    
+
+    # Validate the angle_unit value
+    if config["angle_unit"] not in ["radians", "degrees"]:
+        raise ValueError("Invalid angle_unit. Must be 'radians' or 'degrees'.")
+
     return config
