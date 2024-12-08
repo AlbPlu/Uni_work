@@ -51,7 +51,7 @@ def fetch_logs():
     try:
         connection = connect_db()
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM operation_logs ORDER BY timestamp DESC")
+        cursor.execute("SELECT * FROM operation_logs ORDER BY timestamp ASC")
         logs = cursor.fetchall()
         connection.close()
         return logs
@@ -59,16 +59,20 @@ def fetch_logs():
         print(f"Error fetching logs: {e}")
         return []
 
-def clear_logs():
+def reset_logs():
     """
-    Deletes all entries from the operation_logs table in the database.
+    Deletes all entries from the operation_logs table and resets the id counter.
     """
     try:
-        connection = connect_db()
+        connection = connect_db()  # Establish database connection
         cursor = connection.cursor()
-        cursor.execute("DELETE FROM operation_logs")  # Deletes all rows in the table
-        connection.commit()
-        connection.close()
-        print("All logs have been successfully cleared.")
+        # Delete all rows in the operation_logs table
+        cursor.execute("DELETE FROM operation_logs")
+        # Reset the autoincrement counter for the id column
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name = 'operation_logs'")
+        connection.commit()  # Commit changes
+        connection.close()  # Close the connection
+        print("All logs have been cleared and the ID counter has been reset.")
     except Exception as e:
-        print(f"Failed to clear logs: {e}")
+        print(f"Failed to reset logs: {e}")
+        return "Unknown error"
