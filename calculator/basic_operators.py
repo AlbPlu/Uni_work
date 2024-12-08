@@ -20,6 +20,7 @@ def add(a, b):
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error"
 
 def subtract(a, b):
     """
@@ -34,6 +35,7 @@ def subtract(a, b):
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error"
 
 def multiply(a, b):
     """
@@ -48,6 +50,7 @@ def multiply(a, b):
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
+        return "Error"
 
 def divide(a, b):
     """
@@ -66,7 +69,9 @@ def divide(a, b):
         handle_error(e, display_to_user=True)
         # Log the error to the database with "Error" as the result
         log_operation("Division", f"{a}, {b}", "Error: Division by zero")
+        return "Error"
     except Exception as e:
         handle_error(e, display_to_user=True)
         # Log the error to the database with "Error" as the result
         log_operation("Division", f"{a}, {b}", "Error: An unexpected error occurred")
+        return "Error"

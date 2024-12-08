@@ -1,6 +1,7 @@
 import math
 from config import load_config
 from error_handler import handle_error
+from db_log import log_operation  # Import the logging function for database
 
 # Load configuration
 config = load_config()
@@ -9,7 +10,7 @@ precision_value = config.get("precision_value", None) if enable_precision else N
 
 def exponent(base, power):
     """
-    Raises the base to the power. Handles undefined cases for real numbers.
+    Raises the base to the power. Handles undefined cases for real numbers and logs the operation.
     """
     try:
         # Rule: 0^0 is undefined
@@ -21,16 +22,20 @@ def exponent(base, power):
         
         result = math.pow(base, power)
         if precision_value is not None:
-            return round(result, precision_value)
+            result = round(result, precision_value)
+        
+        # Log the operation
+        log_operation("Exponentiation", f"Base: {base}, Power: {power}", result)
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
-        return "Error: An unexpected error occurred"
+        log_operation("Exponentiation", f"Base: {base}, Power: {power}", "Error: An unexpected error occurred")
+        return "Error"
 
 def logarithm(value, base=math.e):
     """
-    Calculates the logarithm of a value with the specified base.
-    Enforces the rules of logarithms in real numbers.
+    Calculates the logarithm of a value with the specified base. Enforces the rules of logarithms
+    in real numbers and logs the operation.
     """
     try:
         # Rule: Value must be positive
@@ -42,15 +47,19 @@ def logarithm(value, base=math.e):
         
         result = math.log(value, base)
         if precision_value is not None:
-            return round(result, precision_value)
+            result = round(result, precision_value)
+        
+        # Log the operation
+        log_operation("Logarithm", f"Value: {value}, Base: {base}", result)
         return result
     except Exception as e:
         handle_error(e, display_to_user=True)
-        return "Error: An unexpected error occurred"
+        log_operation("Logarithm", f"Value: {value}, Base: {base}", "Error: An unexpected error occurred")
+        return "Error"
 
 def nth_root(value, n):
     """
-    Calculates the n-th root of a value. Enforces real number rules.
+    Calculates the n-th root of a value. Enforces real number rules and logs the operation.
     """
     try:
         # Rule: n cannot be zero
@@ -70,8 +79,13 @@ def nth_root(value, n):
             result = value ** (1 / n)  # Use the exponentiation operator
         
         if precision_value is not None:
-            return round(result, precision_value)
+            result = round(result, precision_value)
+        
+        # Log the operation
+        log_operation("Nth Root", f"Value: {value}, Index: {n}", result)
         return result
+    
     except Exception as e:
         handle_error(e, display_to_user=True)
-        return "Error: An unexpected error occurred"
+        log_operation("Nth Root", f"Value: {value}, Index: {n}", "Error: An unexpected error occurred")
+        return "Error"
