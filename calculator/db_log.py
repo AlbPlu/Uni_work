@@ -58,3 +58,17 @@ def fetch_logs():
     except Exception as e:
         print(f"Error fetching logs: {e}")
         return []
+
+def clear_logs():
+    """
+    Deletes all entries from the operation_logs table in the database.
+    """
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM operation_logs")  # Deletes all rows in the table
+        connection.commit()
+        connection.close()
+        print("All logs have been successfully cleared.")
+    except Exception as e:
+        print(f"Failed to clear logs: {e}")
