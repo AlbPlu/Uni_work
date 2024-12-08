@@ -21,12 +21,12 @@ def apply_precision(value):
 def evaluate_expression(expression):
     """
     Evaluates a mathematical expression, including basic and trigonometric functions.
-    Logs the operation if applicable.
-    :param expression: The input string (e.g., "sin(90)+5")
+    Handles parentheses for grouped expressions.
+    :param expression: The input string (e.g., "(2+3)*4")
     :return: The evaluated result.
     """
     try:
-        # Map basic operators to their module functions
+        # Map basic operators to functions
         basic_operations = {
             "+": basic_operators.add,
             "-": basic_operators.subtract,
@@ -53,8 +53,7 @@ def evaluate_expression(expression):
             func_name = match.group(1)  # Trigonometric function name
             argument = float(match.group(2))  # Extract the angle or value
             if func_name in trig_operations:
-                result = trig_operations[func_name](argument)
-                return str(apply_precision(result))  # Evaluate with precision
+                return str(apply_precision(trig_operations[func_name](argument)))  # Evaluate with precision
             raise ValueError(f"Unsupported function: {func_name}")
 
         # Replace trigonometric functions with their evaluated results
@@ -64,17 +63,16 @@ def evaluate_expression(expression):
         # Replace 'pi' with its value
         expression = expression.replace("pi", str(pi))
 
-        # Match and evaluate basic operations (two operands and one operator)
-        match = re.match(r'^\s*(-?\d+(\.\d+)?)\s*([-+*/^])\s*(-?\d+(\.\d+)?)\s*$', expression)
-        if match:
-            operand1, operator, operand2 = float(match.group(1)), match.group(3), float(match.group(4))
-            if operator in basic_operations:
-                # Use the operator function, which logs the operation
-                return basic_operations[operator](operand1, operand2)
-
-        # If no valid operation is detected
-        raise ValueError("Invalid input or unsupported operation.")
+        # Securely evaluate the expression using eval
+        # Use the operations map to allow only safe expressions
+        allowed_names = {**basic_operations, **trig_operations, "pi": pi}
+        code = compile(expression, "<string>", "eval")
+        for name in code.co_names:
+            if name not in allowed_names:
+                raise ValueError(f"Use of '{name}' is not allowed.")
+        
+        result = eval(code, {"__builtins__": None}, allowed_names)
+        return apply_precision(result)
 
     except Exception as e:
         raise ValueError(f"Error evaluating expression: {e}")
-    return "error"
