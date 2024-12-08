@@ -10,38 +10,38 @@ def connect_db():
     """
     connection = sqlite3.connect(DB_FILE)
     cursor = connection.cursor()
-    # Create the table if it doesn't already exist
+    # Create the table with the correct schema
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS operation_logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            operator TEXT NOT NULL,
-            operands TEXT NOT NULL,
-            result TEXT NOT NULL,
+            operator TEXT NOT NULL,   -- The operation type (e.g., "Expression Evaluation")
+            expression TEXT NOT NULL, -- The full mathematical expression
+            result TEXT NOT NULL,     -- The result of the evaluation
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     """)
     connection.commit()
     return connection
 
-def log_operation(operator, operands, result):
+
+def log_operation(operator, expression, result):
     """
     Logs an operation to the database.
-    :param operator: The operator used (e.g., addition, sine, logarithm)
-    :param operands: The operands used in the operation (e.g., "5, 3")
+    :param operator: The operator type (e.g., "Expression Evaluation")
+    :param expression: The full mathematical expression
     :param result: The result of the operation
     """
     try:
         connection = connect_db()
         cursor = connection.cursor()
         cursor.execute("""
-            INSERT INTO operation_logs (operator, operands, result)
+            INSERT INTO operation_logs (operator, expression, result)
             VALUES (?, ?, ?)
-        """, (operator, operands, str(result)))
+        """, (operator, expression, str(result)))
         connection.commit()
         connection.close()
     except Exception as e:
         print(f"Error logging operation: {e}")
-        return "Error"
 
 def fetch_logs():
     """
@@ -75,4 +75,3 @@ def reset_logs():
         print("All logs have been cleared and the ID counter has been reset.")
     except Exception as e:
         print(f"Failed to reset logs: {e}")
-        return "Unknown error"
