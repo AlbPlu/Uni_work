@@ -30,8 +30,18 @@ def append_to_expression(value):
         # Replace the last operator with the new one
         display.set(current_text[:-1] + value)
     else:
-        # Otherwise, append the value as normal
-        display.set(current_text + str(value))
+       # Automatically insert '*' if necessary
+        if (
+            current_text
+            and (current_text[-1].isdigit() or current_text[-1] == "π" or current_text[-1] == ")")
+            and (value.startswith("(") or value.startswith("sin") or value.startswith("cos")
+                 or value.startswith("tan") or value.startswith("cot") or value.startswith("arcsin")
+                 or value.startswith("arccos") or value.startswith("arctan") or value.startswith("arccot"))
+        ):
+            display.set(current_text + "*" + str(value))
+        else:
+            # Otherwise, append the value as normal
+            display.set(current_text + str(value))
 
 def clear_expression():
     """
