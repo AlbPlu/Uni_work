@@ -59,8 +59,8 @@ def evaluate_expression(expression):
         expression = re.sub(r'(sin|cos|tan|cot|arcsin|arccos|arctan|arccot)\((-?\d+(\.\d+)?)\)',
                             evaluate_trig, expression)
 
-        # Replace 'pi' with its value
-        expression = expression.replace("pi", str(pi))
+         # Replace the π symbol with its value
+        expression = expression.replace("π", str(pi))
 
         # Securely evaluate the expression using eval
         allowed_names = {**basic_operations, **trig_operations, "pi": pi}
