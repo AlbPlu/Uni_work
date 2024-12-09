@@ -1,0 +1,5 @@
+{
+    "enable_precision": true,
+    "precision_value": 5,
+    "angle_unit": "radians"
+}
