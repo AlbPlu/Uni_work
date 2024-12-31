@@ -111,7 +111,7 @@ def show_logs():
     # Create the logs window
     logs_window = tk.Toplevel()
     logs_window.title("Logs")
-    logs_window.geometry("800x400")  # Set an appropriate initial size
+    logs_window.geometry("850x400")  # Set an appropriate initial size
 
     # Create the table using Treeview
     columns = ("ID", "Operator", "Expression", "Result", "Timestamp")
