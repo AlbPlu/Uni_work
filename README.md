@@ -12,6 +12,4 @@ This project contains python scripts for math operations:
 *) Logarithms
 *) Trigonometric functions
 
-In the future the plan is to transform this into a GUI calculator
-
-
+Implemented GUI and logging functionality
